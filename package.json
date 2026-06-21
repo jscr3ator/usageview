@@ -1,0 +1,61 @@
+{
+  "name": "usageview",
+  "version": "1.0.0",
+  "description": "A tiny liquid-glass LAN usage dashboard with local-only onboarding.",
+  "author": "UsageView contributors",
+  "license": "MIT",
+  "type": "module",
+  "main": "src/electron-main.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "app": "electron .",
+    "check": "node --check src/server.js && node --check public/app.js && node --check src/electron-main.js",
+    "test": "npm run check && node tests/onboarding-flow.mjs",
+    "publish:check": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/publish-check.ps1",
+    "dist": "npm run check && electron-builder --win"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "electron": "^42.4.1",
+    "electron-builder": "^26.0.12",
+    "playwright-core": "^1.61.0"
+  },
+  "build": {
+    "appId": "dev.usageview.app",
+    "productName": "UsageView",
+    "asar": false,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "assets/**",
+      "public/**",
+      "scripts/**",
+      "src/**",
+      "package.json",
+      ".env.example",
+      "README.md",
+      "LICENSE"
+    ],
+    "win": {
+      "icon": "assets/app-icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true,
+      "shortcutName": "UsageView",
+      "artifactName": "UsageView Setup ${version}.${ext}"
+    }
+  }
+}
